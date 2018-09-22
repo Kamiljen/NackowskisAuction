@@ -1,0 +1,20 @@
+﻿@using NackowskisAuctionHouse.ViewModels;
+
+@model UserRoleVM;
+
+
+<tr>
+    <td>@Model.UserName</td>
+    <td>@Model.UserId</td>
+    <td>@Model.OldRole</td>
+    <td>
+        <form asp-action="UpdateRole" asp-controller="Account" method="post">
+            <input type="hidden" asp-for="@Model.UserId" name="userId" value="@Model.UserId" />
+            <input type="hidden" asp-for="@Model.OldRole" name="oldRole" value="@Model.OldRole" />
+            <input type="hidden" asp-for="@Model.NewRole" name="newRole" value="@Model.NewRole" />
+            <button type="submit"> Gör till admin</button>
+        </form>
+    </td>
+</tr>
+
+

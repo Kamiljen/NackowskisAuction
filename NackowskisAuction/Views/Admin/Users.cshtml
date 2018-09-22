@@ -1,0 +1,44 @@
+﻿@using NackowskisAuctionHouse.ViewModels;
+
+@model List<UserVM>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h2>Användare</h2>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Användar namn</th>
+            <th scope="row">Id</th>
+            <th scope="row">Roll</th>
+            <th></th>
+        </tr>
+        @foreach (var usersInRole in @Model)
+        {
+            foreach (var user in usersInRole.Users)
+            {
+
+                if (usersInRole.Role == "Regular")
+                {
+                
+
+                    @await Component.InvokeAsync("RoleUpdater", new { user = user, oldRole = usersInRole.Role, newRole = "Admin" })
+                }
+                else
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Id</td>
+                        <td>@usersInRole.Role</td>
+                        <td></td>
+                    </tr>
+                }
+
+            }
+
+        }
+    </tbody>
+</table>
+

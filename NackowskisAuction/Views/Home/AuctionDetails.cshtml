@@ -1,0 +1,134 @@
+﻿
+@using NackowskisAuctionHouse.ViewModels;
+@using Microsoft.AspNetCore.Identity;
+@using NackowskisAuctionHouse.DAL.IdentityModels;
+@model AuctionWithBidsVM;
+@{
+    ViewData["Title"] = "Auktion";
+}
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var highestBid = Model.Bids.OrderBy(x => x.Summa).First();
+}
+
+<h2>@Model.Auction.Titel</h2>
+
+
+<table class="table">
+    <tbody>
+        <tr>
+            <th scope="row">Start datum:</th>
+            <td>@Model.Auction.StartDatum</td>
+
+        </tr>
+        <tr>
+            <th scope="row">Slut datum:</th>
+            <td>@Model.Auction.SlutDatum</td>
+
+        </tr>
+
+        <tr>
+            <th scope="row">Utropspris:</th>
+            <td>@Model.Auction.Utropspris</td>
+        </tr>
+
+        @*<tr>
+                <th scope="row">Aktuellt bud:</th>
+                @if (Model.HighestBid.Summa > 0)
+                {
+                    <td>@Model.HighestBid.Summa</td> }
+                else
+                {
+                    <td>Inga aktuella bud</td>
+                }
+            </tr>*@
+
+        @if (User.HasClaim(System.Security.Claims.ClaimTypes.Role, "Admin"))
+        {
+            <tr>
+                <th scope="row">Bud id:</th>
+                <td>@Model.Auction.AuktionID</td>
+            </tr>
+            <tr>
+                <th scope="row">Skapad av:</th>
+                <td>@Model.Auction.SkapadAv</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-sm-4"><p style="font-size : 16px; font-weight: 700">Beskrivning:</p></div>
+        <div class="col-sm-8">@Model.Auction.Beskrivning</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div>
+            <div class="col-sm-3"><p style="font-size : 16px; font-weight: 700">Aktuellt bud:</p></div>
+            <div class="col-sm-3" id="currentBid">
+                @if (highestBid.Summa > 0)
+                {
+                    <p>@highestBid.Summa</p>
+
+                }
+                else
+                {
+                    <p>Inga aktuella bud</p>
+                }
+            </div>
+
+
+
+            @if (highestBid.Summa > 0)
+            {
+                <table>
+                    <tr>
+                        <th>Budgivare</th>
+                        <th>Summa</th>
+                    </tr>
+                    @foreach (var bid in Model.Bids)
+                    {
+                        <tr>
+                            <td>@bid.Budgivare</td>
+                            <td>@bid.Summa</td>
+                        </tr>
+                    }
+                </table>
+            }
+
+            <div class="col-sm-2">
+                <partial name="_PlaceBidPartial" for="@Model" />
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    @if (Model.Auction.SkapadAv == user.Email)
+                    {
+                        <div class="col-sm-2">
+                            <a class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="DeleteAuction" asp-controller="Admin">Radera</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="EditAuction" asp-controller="Admin">Ändra</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-4">
+                            <button class="btn my-2 my-sm-0" type="submit" disabled="disabled">Ändra</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="btn my-2 my-sm-0" type="submit" disabled="disabled">Ändra</button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

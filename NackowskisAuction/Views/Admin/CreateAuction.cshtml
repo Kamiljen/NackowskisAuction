@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using NackowskisAuctionHouse.DAL.IdentityModels;
+@using NackowskisAuctionHouse.DAL.Models;
+
+@model Auction;
+
+@inject UserManager<AppUser> UserManager;
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var today = DateTime.Now;
+}
+
+<h2>Skapa Auktion</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateAuction" asp-controller="Admin">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Titel" class="control-label"></label>
+                <input asp-for="Titel" class="form-control" />
+                <span asp-validation-for="Titel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Beskrivning" class="control-label"></label>
+                <textarea asp-for="Beskrivning" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Beskrivning" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @*<label asp-for="@Model.StartDatum" class="control-label"></label>
+        <input asp-for="StartDatum" type="date" class="form-control" id="fromDatepicker" width="220" value="@today" />
+        <span asp-validation-for="StartDatum" class="text-danger"></span>*@
+                <label asp-for="@Model.StartDatum" class="control-label"></label>
+                <input asp-for="StartDatum" type="date" class="form-control" id="fromDatepicker" width="220" value="@today" />
+                <span asp-validation-for="StartDatum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.StartTid" class="control-label"></label>
+                <input asp-for="StartTid" type="time" class="form-control" id="startTid" width="220" value="12:00" />
+                <span asp-validation-for="StartTid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <label asp-for="@Model.SlutDatum" class="control-label"></label>
+                <input asp-for="SlutDatum" type="date" class="form-control" id="toDatepicker" width="220" value=""/>
+                <span asp-validation-for="SlutDatum" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.SlutTid" class="control-label"></label>
+                <input asp-for="SlutTid" type="time" class="form-control" id="slutTid" width="220" value="12:00" />
+                <span asp-validation-for="SlutTid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <input asp-for="Gruppkod" class="form-control" value="1060" type="hidden" />
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Utropspris" class="control-label"></label>
+                <input asp-for="Utropspris" class="form-control" />
+                <span asp-validation-for="Utropspris" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SkapadAv" class="control-label"></label>
+                <label class="control-label">@user.Email</label>
+                <input asp-for="SkapadAv" class="form-control" type="hidden" value="@user.Email" />
+                <span asp-validation-for="SkapadAv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

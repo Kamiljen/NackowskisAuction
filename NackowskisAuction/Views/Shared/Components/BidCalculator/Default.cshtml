@@ -1,0 +1,17 @@
+﻿@using NackowskisAuctionHouse.ViewModels;
+
+@model BidVM;
+
+<form asp-controller="Home" asp-action="PlaceBid" method="post"
+data-ajax="true" 
+data-ajax-method="POST" 
+data-ajax-mode="replace" 
+data-ajax-update="#currentBid"
+class="form-inline my-2 my-lg-0">
+
+    <input asp-for="bidSum" class="form-control mr-sm-2" name="bidSum" type="number" value="@Model.calculatedSum">
+    <input asp-for="auctionId" type="hidden" name="auctionId" value="@Model.auctionId" />
+    <input asp-for="calculatedSum" value="@Model.calculatedSum" type="hidden" />
+    @*<span asp-validation-for="bidSum" class="text-danger"></span>*@
+    <button class="btn my-2 my-sm-0" type="submit">Lägg bud</button>
+</form>

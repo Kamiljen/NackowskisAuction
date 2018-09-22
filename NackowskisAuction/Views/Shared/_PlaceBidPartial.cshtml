@@ -1,0 +1,16 @@
+﻿@using NackowskisAuctionHouse.ViewModels;
+
+@model AuctionWithBidsVM
+
+@{
+    var highestBid = Model.Bids.OrderBy(x => x.Summa).First();
+}
+
+@if (Model.Bids.Count > 1)
+{
+    @await Component.InvokeAsync("BidCalculator", new { bidSum = highestBid.Summa, auctionId = Model.Auction.AuktionID })
+}
+else
+{
+    @await Component.InvokeAsync("BidCalculator", new { bidSum = Model.Auction.Utropspris, auctionId = Model.Auction.AuktionID })
+}
