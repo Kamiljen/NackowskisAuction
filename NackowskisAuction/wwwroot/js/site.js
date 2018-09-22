@@ -1,87 +1,48 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
-// Write your JavaScript code.
-//$('#datepicker').datetimepicker({
-//    uiLibrary: 'bootstrap4',
-//    modal: true,
-//    footer: true,
-//    format: 'dd-mm-yyyy HH'
-//});
-//var today, datetimepicker;
-//today = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear(), new Date().getHours());
-//datepicker = $('#datepicker').datetimepicker({
-//    minDate: today,
-//    uiLibrary: 'bootstrap4',
-//    modal: true,
-//    footer: true,
-//    format: 'dd-mm-yyyy HH'
-//});
-//var today = new Date();
-//var dd = today.getDate();
-//var mm = today.getMonth() + 1; //January is 0!
-//var HH = today.getHours();
+//LoginModal ajax
+$(function () {
+    var placeholderElement = $('#modal-placeholder');
+    $('a[data-toggle="ajax-modal"]').click(function (event) {
+        var url = $(this).data('url');
+        $.get(url).done(function (data) {
+            placeholderElement.html(data);
+            placeholderElement.find('.modal').modal('show');
+        });
+    });
+    placeholderElement.on('click', '[data-save="modal"]', function (event) {
+        event.preventDefault();
+
+        var form = $(this).parents('.modal').find('form');
+        var actionUrl = form.attr('action');
+        var dataToSend = form.serialize();
+
+        $.post(actionUrl, dataToSend).done(function (data) {
+            var newBody = $('.modal-body', data);
+            placeholderElement.find('.modal-body').replaceWith(newBody);
+
+            // find IsValid input field and check it's value
+            // if it's valid then hide modal window
+            var isValid = newBody.find('[name="IsValid"]').val() == 'True';
+            if (isValid) {
+                placeholderElement.find('.modal').modal('hide');
+                location.reload();
+            }
+        });
+    });
+
+});
+
+// attach click event handler to an element
+// which is located inside #modal-placeholder
+// and has data-save attribute equal to modal
 
 
-//var yyyy = today.getFullYear();
-//if (dd < 10) {
-//    dd = '0' + dd;
-//}
-//if (mm < 10) {
-//    mm = '0' + mm;
-//}
-//if (HH < 10) {
-//    HH = '0' + HH + ':' + '00';
-//}
-//today = dd + '-' + mm + '-' + yyyy + " " + HH;
 
-//$('#fromDatepicker').datetimepicker({
-//    uiLibrary: 'bootstrap4',
-//    format: 'dd-mm-yyyy HH:MM',
-//    value: today,
-//    minDate: '16-09-2018 12.00',
-//    modal: true,
-//    footer: true
 
-//});
-//$('#toDatepicker').datetimepicker({
-//    uiLibrary: 'bootstrap4',
-//    format: 'dd-mm-yyyy HH:MM',
-//    value: today,
-//    minDate: '16-09-2018 12:00',
-//    modal: true,
-//    footer: true
 
-//});
-
-//$('#datepicker').datepicker({
-//    uiLibrary: 'bootstrap4',
-//    format: 'yyyy-mm-dd',
-//    weekStartDay: 1,
-//    minDate: "2018-09-16",
-//    maxDate: "2018-09-23"
-//});
-
-//var frm = $('#userOptionsForm');
-
-//frm.submit(function (e) {
-
-//    e.preventDefault();
-
-//    $.ajax({
-//        type: frm.attr('method'),
-//        url: frm.attr('action'),
-//        data: frm.serialize(),
-//        success: function (data) {
-//            console.log('Submission was successful.');
-//            console.log(data);
-//        },
-//        error: function (data) {
-//            console.log('An error occurred.');
-//            console.log(data);
-//        },
-//    });
-//});
+//Barchart dropdown select ajax calls
 var dataType = 'application/json; charset=utf-8';
 
 $('#userOptionDropdown').change(function () {

@@ -7,131 +7,46 @@
 @using NackowskisAuctionHouse.ViewModels;
 
 @model SignInVM
-@inject SignInManager<AppUser> SignInManager
 
-@{ 
-    @*@ViewData["ReturnUrl"] = Context.Request.Query["returnUrl"].SingleOrDefault();*@
-    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <li class="nav-item">
+
+        <a asp-area="Identity" class="nav-link" asp-page="/Account/Manage/Index" title="Manage"><i class="fas fa-user-circle"></i>  @UserManager.GetUserName(User)</a>
+    </li>
+    <li class="nav-item">
+        <form asp-controller="Account" asp-action="SignOut" id="logoutForm" class="navbar-right text-muted">
+            <button type="submit" class="btn btn-link navbar-btn navbar-link text-muted">Logga ut</button>
+        </form>
+    </li>
+}
+else
+{
+
+    <li class="nav-item">
+        <a data-toggle="modal" data-target="#registerModal" class="nav-link" href="#registerModal">Skapa konto</a>
+
+    </li>
+    <li class="nav-item">
+        <a  class=" nav-link" data-toggle="ajax-modal" data-url="@Url.Action("SignIn", "Account")" data-target="#signinModal">Logga in</a>
+
+    </li>
+    <div id="modal-placeholder"></div>
+    @*<partial name="_LoginModalPartial" model="@Model" />*@
+    @*@await Component.InvokeAsync("Register");*@
+
 }
 
-<div class="modal" tabindex="-1" role="dialog" id="signinModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Logga in</h5>
-                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>*@
-            </div>
-            <div class="modal-body">
-                <form asp-route-returnUrl="@ViewData["ReturnUrl"]" asp-action="SignIn" asp-controller="Account" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" id="signInEmail" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password"></label>
-                        <input asp-for="Password" id="signInPassword"class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="RememberMe">
-                                <input asp-for="RememberMe" />
-                                @Html.DisplayNameFor(m => m.RememberMe)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-default">Logga in</button>
-                    </div>
-                    <div class="form-group">
-                        @*<p>
-                    <a asp-action="ForgotPassword">Glömt ditt lösenord?</a>
-                </p>*@
-                        <a data-toggle="modal" data-target="#registerModal" data-dismiss="modal" class="nav-link" href="#registerModal">Registrera nytt konto?</a>
-                    </div>
 
 
 
 
 
-                </form>
-                <section>
-                    <h4>Logga in med ditt Google konto</h4>
-                    <hr />
-                    @{
-                        
-                        if (loginProviders?.Count != 0)
-                        {
-                            <form asp-area="Identity" asp-page="/Account/ExternalLogin" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                                <div>
-                                    <p>
-                                        @foreach (var provider in loginProviders)
-                                        {
-                                            <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Logga in med ditt @provider.DisplayName konto">@provider.DisplayName</button>
-                                        }
-                                    </p>
-                                </div>
-                            </form>
-                        }
-                    }
-                </section>
-                @if (loginProviders.Count > 0)
-                {
-                    @*<form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-            <div>
-                <p>
-                    @foreach (var provider in loginProviders)
-                    {
-                        <button class="nav-link"  type="submit" name="provider" value="@provider.Name">Logga in med ditt @provider.DisplayName konto</button>
-                        @*<button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>*@
-                    //}
-                    @*</p>
-                </div>
-            </form>*@
-                }
-            </div>
-            
-        </div>
-    </div>
-</div>
 
-@*<div class="row">
-    
-    
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h4>Use another service to log in.</h4>
-            <hr />
-            @{
-                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                if (loginProviders.Count == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
-                            for details on setting up this ASP.NET application to support logging in via external services.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in loginProviders)
-                                {
-                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.Name</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
-</div>*@
+
+
 

@@ -13,7 +13,8 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto my-2 my-lg-0">
-                  <partial name="_LoginPartial" />
+                    @await Component.InvokeAsync("SignIn");
+                    
                     <li class="nav-item">
                         <a class="btn btn-link navbar-btn navbar-link text-muted">About</a>
                     </li>

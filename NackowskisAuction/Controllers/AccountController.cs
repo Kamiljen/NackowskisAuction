@@ -19,22 +19,6 @@ namespace NackowskisAuctionHouse.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> SignIn(SignInVM input, string returnUrl = null)
-        {
-            returnUrl = returnUrl ?? Url.Content("~/");
-
-            if (ModelState.IsValid)
-            {
-                var result = await _userService.SignInAsync(input);
-                if (result.Succeeded)
-                {
-                    return LocalRedirect(returnUrl);
-                }
-            }
-
-            return RedirectToAction("Index", "Home");
-        }
-
         public async Task<IActionResult> Register(RegisterVM input, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -50,9 +34,28 @@ namespace NackowskisAuctionHouse.Controllers
             }
             return LocalRedirect(returnUrl);
         }
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            var model = new SignInVM();
+            return PartialView("_LoginModalPartial", model);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> SignIn(SignInVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _userService.SignInAsync(model);
+                if (!result.Succeeded)
+                {
+                    ModelState.AddModelError(string.Empty, "Fel användarnamn eller lösenord");
+                }
+            }
+            
+            return PartialView("_LoginModalPartial", model);
+        }
 
-       
         [ValidateAntiForgeryToken]
         public IActionResult SignOut()
         {

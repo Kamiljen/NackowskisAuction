@@ -24,8 +24,10 @@
                     </button>*@
             </div>
             <div class="modal-body">
-                <form asp-route-returnUrl="@ViewData["ReturnUrl"]" asp-action="SignIn" asp-controller="Account" method="post">
+                <form asp-action="SignIn" asp-controller="Account" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+
                     <div class="form-group">
                         <label asp-for="Email"></label>
                         <input asp-for="Email" id="signInEmail" class="form-control" />
@@ -45,12 +47,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-default">Logga in</button>
+                        <button type="button" data-save="modal" class="btn btn-default">Logga in</button>
                     </div>
                     <div class="form-group">
                         @*<p>
-                                <a asp-action="ForgotPassword">Glömt ditt lösenord?</a>
-                            </p>*@
+                <a asp-action="ForgotPassword">Glömt ditt lösenord?</a>
+            </p>*@
                         <a data-toggle="modal" data-target="#registerModal" data-dismiss="modal" class="nav-link" href="#registerModal">Registrera nytt konto?</a>
                     </div>
 

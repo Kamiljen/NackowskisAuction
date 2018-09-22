@@ -83,7 +83,7 @@ namespace NackowskisAuctionHouse.IdentityService
         public async void SignOut()
         {
            await _signInManager.SignOutAsync();
-            var token = _userManager.
+          
         }
 
         public AppUser GetUserWithId(string userId)
