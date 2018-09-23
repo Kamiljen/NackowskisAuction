@@ -70,10 +70,10 @@ namespace NackowskisAuctionHouse.IdentityService
           
         }
 
-        public async Task<bool> SignInAsync(AppUser user, bool isPersistent)
+        public async void SignInAsync(AppUser user, bool isPersistent)
         {
-             await _signInManager.SignInAsync(user, isPersistent);
-            return true;
+            await _signInManager.SignInAsync(user, isPersistent);
+
         }
         public async Task<SignInResult> SignInAsync(SignInVM Input)
         {

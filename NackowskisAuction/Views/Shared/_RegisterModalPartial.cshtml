@@ -1,0 +1,59 @@
+﻿@using System.Collections.Generic
+@using System.Linq
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+@using Microsoft.AspNetCore.Identity
+@using NackowskisAuctionHouse.DAL.IdentityModels;
+@using NackowskisAuctionHouse.ViewModels;
+
+@model RegisterVM
+@inject SignInManager<AppUser> SignInManager
+
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+
+<div class="modal" tabindex="-1" role="dialog" id="registerModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrera konto</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="Register" asp-controller="Account" id="registerForm">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input name="IsValid" type="hidden" value="@ViewData.ModelState.IsValid.ToString()" />
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PasswordConfirmed"></label>
+                        <input asp-for="PasswordConfirmed" class="form-control" />
+                        <span asp-validation-for="PasswordConfirmed" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default" data-save="modal">Registrera</button>
+                    </div>
+
+                    <div class="form-group">
+                        <p>
+                            <a class=" nav-link" data-toggle="ajax-loginmodal" data-dismiss="modal" data-url="@Url.Action("SignIn", "Account")" href="#" data-target="#signinModal">Har du redan ett konto? Logga in</a>
+                        </p>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NackowskisAuctionHouse.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NackowskisAuctionHouse.ChartViewModels;
 
 namespace NackowskisAuctionHouse.ViewComponents
 {
-    public class RegisterViewComponent : ViewComponent
+   
+    public class BarChartViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = new RegisterVM();
-
-
+            var model = new ChartVM();
             return View(model);
         }
     }

@@ -28,16 +28,16 @@ else
 {
 
     <li class="nav-item">
-        <a data-toggle="modal" data-target="#registerModal" class="nav-link" href="#registerModal">Skapa konto</a>
+        <a data-toggle="ajax-register-modal" data-url="@Url.Action("Register", "Account")" data-target="#registerModal" class="nav-link" href="#registerModal">Skapa konto</a>
+
 
     </li>
     <li class="nav-item">
-        <a  class=" nav-link" data-toggle="ajax-modal" data-url="@Url.Action("SignIn", "Account")" data-target="#signinModal">Logga in</a>
+        <a class=" nav-link" data-toggle="ajax-login-modal" data-url="@Url.Action("SignIn", "Account")" href="#" data-target="#signinModal">Logga in</a>
 
     </li>
-    <div id="modal-placeholder"></div>
-    @*<partial name="_LoginModalPartial" model="@Model" />*@
-    @*@await Component.InvokeAsync("Register");*@
+    <div id="signin-modal-placeholder"></div>
+    <div id="register-modal-placeholder"></div>
 
 }
 

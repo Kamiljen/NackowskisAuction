@@ -19,21 +19,49 @@ namespace NackowskisAuctionHouse.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Register(RegisterVM input, string returnUrl = null)
-        {
-            returnUrl = returnUrl ?? Url.Content("~/");
+        //public async Task<IActionResult> Register(RegisterVM input, string returnUrl = null)
+        //{
+        //    returnUrl = returnUrl ?? Url.Content("~/");
 
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userService.RegisterUser(input);
+        //        if (user != null)
+        //        {
+        //            var done = await _userService.SignInAsync(user, true);
+        //            return LocalRedirect(returnUrl);
+        //        }
+        //    }
+        //    return LocalRedirect(returnUrl);
+        //}
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            var model = new RegisterVM();
+            return PartialView("_RegisterModalPartial", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM model)
+        {
             if (ModelState.IsValid)
             {
-                var user = await _userService.RegisterUser(input);
+                var user = await _userService.RegisterUser(model);
+
                 if (user != null)
                 {
-                    var done = await _userService.SignInAsync(user, true);
-                    return LocalRedirect(returnUrl);
+                    _userService.SignInAsync(user, true);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Användarnamn upptaget, välj något annat!");
                 }
             }
-            return LocalRedirect(returnUrl);
+
+            return PartialView("_RegisterModalPartial", model);
         }
+
         [HttpGet]
         public IActionResult SignIn()
         {

@@ -9,7 +9,8 @@ namespace NackowskisAuctionHouse.ViewModels
     public class RegisterVM
     {
         [Required(ErrorMessage = "Användarnamn krävs")]
-        [DataType(DataType.EmailAddress, ErrorMessage = "Fälter kräver en mailadress")]
+        //[DataType(DataType.E, ErrorMessage = "Fälter kräver en mailadress")]
+        [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$", ErrorMessage = "Mailadress i fel format")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Lösenord krävs")]
