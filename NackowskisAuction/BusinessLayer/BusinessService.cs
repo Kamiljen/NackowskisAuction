@@ -86,7 +86,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return searchResults;
         }
 
-        public async Task<DashboardVM> ActivityLineChart(int month, string userName)
+        public async Task<DashboardVM> ActivityBarChart(int month, string userName)
         {
             var controllerSet = new DashboardVM();
             var alAuctions = await _api.GetAuctions();

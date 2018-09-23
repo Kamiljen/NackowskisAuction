@@ -34,8 +34,7 @@ $(function () {
 
 });
 
-//Registermodal
-
+//Registermodal ajax
 $(function () {
     var placeholderElement = $('#register-modal-placeholder');
     $('a[data-toggle="ajax-register-modal"]').click(function (event) {
@@ -68,9 +67,6 @@ $(function () {
 
 });
 
-// attach click event handler to an element
-// which is located inside #modal-placeholder
-// and has data-save attribute equal to modal
 
 
 
