@@ -137,12 +137,15 @@ namespace NackowskisAuctionHouse.BusinessLayer
             var availableMonths = auctions.Select(x => x.SlutDatumString.Substring(5, 2)).Distinct().ToList();
             foreach (var date in availableMonths)
             {
-
-                temp.Add(new SelectListItem
+                if (int.Parse(date) <= DateTime.Now.Month )
                 {
-                    Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
-                    Value = date
-                });
+                    temp.Add(new SelectListItem
+                    {
+                        Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
+                        Value = date
+                    });
+                }
+                
             }
 
             return temp;
@@ -156,11 +159,14 @@ namespace NackowskisAuctionHouse.BusinessLayer
             foreach (var date in availableMonths)
             {
 
-                temp.Add(new SelectListItem
+                if(int.Parse(date) <= DateTime.Now.Month)
                 {
-                    Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
-                    Value = date
-                });
+                    temp.Add(new SelectListItem
+                    {
+                        Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
+                        Value = date
+                    });
+                }
             }
 
             return temp;
@@ -198,7 +204,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
                     
                 }
                 
-                var highestBid = (auctionBids.Count != 0) ? auctionBids.OrderBy(x => x.Summa).First().Summa : 0;
+                var highestBid = (auctionBids.Count != 0) ? auctionBids.OrderByDescending(x => x.Summa).First().Summa : 0;
                 if (highestBid != 0)
                 {
                     utropsPris += item.Utropspris;
