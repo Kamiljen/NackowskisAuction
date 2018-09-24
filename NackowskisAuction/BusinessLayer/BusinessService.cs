@@ -86,35 +86,92 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return searchResults;
         }
 
+        //public async Task<DashboardVM> ActivityLineChart(int month, string userName)
+        //{
+        //    var controllerSet = new DashboardVM();
+        //    var alAuctions = await _api.GetAuctions();
+        //    var selectedDates = alAuctions.WhereIf(month != 0 ,x => DateTime.Parse(x.SlutDatumString).Month == month)
+        //        .WhereIf( userName != "Alla", x =>x.SkapadAv == userName)
+        //        .ToList();
+        //    var bids = await GetBids(selectedDates);
+        //    controllerSet.DataSets = await GetDataSet(selectedDates, bids);
+        //    var availableMonths = getAvailableMonths(alAuctions);
+        //    controllerSet.availableMonths = new List<SelectListItem>();
+        //    foreach (var date in availableMonths)
+        //    {
+                
+        //        controllerSet.availableMonths.Add(new SelectListItem {
+        //            Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
+        //            Value = date
+        //            });
+        //    }
+        //    controllerSet.userOptions = new List<SelectListItem>();
+        //    controllerSet.userOptions.Add(new SelectListItem { Text = "Alla användare", Value = "Alla" });
+        //    controllerSet.userOptions.Add(new SelectListItem { Text = userName, Value = userName });
+        //    return controllerSet;
+        //}
+
+        
+
         public async Task<DashboardVM> ActivityBarChart(int month, string userName)
         {
             var controllerSet = new DashboardVM();
             var alAuctions = await _api.GetAuctions();
-            var selectedDates = alAuctions.WhereIf(month != 0 ,x => DateTime.Parse(x.SlutDatumString).Month == month)
-                .WhereIf( userName != "Alla", x =>x.SkapadAv == userName)
+            var selectedDates = alAuctions.WhereIf(month != 0, x => DateTime.Parse(x.SlutDatumString).Month == month)
+                .WhereIf(userName != "Alla", x => x.SkapadAv == userName)
                 .ToList();
             var bids = await GetBids(selectedDates);
             controllerSet.DataSets = await GetDataSet(selectedDates, bids);
-            var availableMonths = getAvailableMonths(alAuctions);
-            controllerSet.availableMonths = new List<SelectListItem>();
-            foreach (var date in availableMonths)
-            {
-                
-                controllerSet.availableMonths.Add(new SelectListItem {
-                    Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
-                    Value = date
-                    });
-            }
-            controllerSet.userOptions = new List<SelectListItem>();
-            controllerSet.userOptions.Add(new SelectListItem { Text = "Alla användare", Value = "Alla" });
-            controllerSet.userOptions.Add(new SelectListItem { Text = userName, Value = userName });
+            controllerSet.availableMonths = GetAvailableMonthsSelectList(alAuctions);
+            controllerSet.userOptions = GetUserOptionsSelectList(userName);
+            controllerSet.userToShow = userName;
+            controllerSet.monthToShow = month.ToString();
+
             return controllerSet;
         }
 
-        public List<string> getAvailableMonths(List<Auction> auctions)
+        public async Task<List<SelectListItem>> GetAvailableMonthsSelectList()
         {
-            return auctions.Select(x =>x.SlutDatumString.Substring(5,2)).Distinct().ToList();
+            var auctions = await _api.GetAuctions();
+            var temp = new List<SelectListItem>();
+            var availableMonths = auctions.Select(x => x.SlutDatumString.Substring(5, 2)).Distinct().ToList();
+            foreach (var date in availableMonths)
+            {
+
+                temp.Add(new SelectListItem
+                {
+                    Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
+                    Value = date
+                });
+            }
+
+            return temp;
             
+        }
+        public  List<SelectListItem> GetAvailableMonthsSelectList(List<Auction> auctions)
+        {
+            
+            var temp = new List<SelectListItem>();
+            var availableMonths = auctions.Select(x => x.SlutDatumString.Substring(5, 2)).Distinct().ToList();
+            foreach (var date in availableMonths)
+            {
+
+                temp.Add(new SelectListItem
+                {
+                    Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
+                    Value = date
+                });
+            }
+
+            return temp;
+
+        }
+        public List<SelectListItem> GetUserOptionsSelectList(string userName)
+        {
+            var temp = new List<SelectListItem>();
+            temp.Add(new SelectListItem { Text = "Alla användare", Value = "Alla" });
+            temp.Add(new SelectListItem { Text = userName, Value = userName });
+            return temp;
         }
 
         public async Task<List<ChartVM>> GetDataSet(List<Auction> auctions, List<List<Bid>> bids)
@@ -128,14 +185,26 @@ namespace NackowskisAuctionHouse.BusinessLayer
             foreach (var item in auctions)
             {
                 List<Bid> auctionBids = new List<Bid>();
-                foreach (var list in bids)
+                foreach (var lists in bids)
                 {
-                    auctionBids = list.Where(x => x.AuktionID == item.AuktionID).ToList();
+                    foreach(var bid in lists)
+                    {
+                        if (bid.AuktionID == item.AuktionID)
+                        {
+                            auctionBids.Add(bid);
+                        }
+                         
+                    }
+                    
                 }
                 
-                var highestBid = (auctionBids.Count != 0) ? auctionBids.OrderBy(x => x.Summa).First().Summa : item.Utropspris;
-                utropsPris += item.Utropspris;
-                slutPris += highestBid;
+                var highestBid = (auctionBids.Count != 0) ? auctionBids.OrderBy(x => x.Summa).First().Summa : 0;
+                if (highestBid != 0)
+                {
+                    utropsPris += item.Utropspris;
+                    slutPris += highestBid;
+                }
+               
                 
 
                

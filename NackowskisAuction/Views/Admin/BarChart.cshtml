@@ -10,23 +10,23 @@
 }
 <h2>LineChart</h2>
 
-@*<form id="userOptionsForm" action="/LineChart"
+<form id="userOptionsForm" action="/GetDataSet"
       method="post" enctype="multipart/form-data">
-    <select class="form-control-custom" asp-items="@Model.userOptions" id="userOptionDropdown"></select>
+    <select class="form-control-custom" asp-for="userToShow" asp-items="@Model.userOptions" id="userOptionDropdown" value="@Model.userToShow"></select>
 </form>
-<form id="availableMonthsForm" action="/LineChart"
+<form id="availableMonthsForm" 
       method="post" enctype="multipart/form-data">
-    <select class="form-control-custom" asp-items="@Model.availableMonths" id="availableMonthsDropdown"></select>
-</form>*@
+    <select class="form-control-custom" asp-for="monthToShow" asp-items="@Model.availableMonths" id="availableMonthsDropdown" value="@Model.monthToShow"></select>
+</form>
 
 @*<form  action="Admin/LineChart" id="userOptionsForm" class="form-inline my-2 my-lg-0"
           method="post">
         <select class="form-control-custom" asp-items="@Model.userOptions" id="userOptionDropdown" onchange="test()">
             <option>Välj användare </option>
         </select>
-    </form>*@
+    </form>
 
-@*<form asp-controller="Admin" action="Admin/LineChart" id="userOptionsForm" class="form-inline my-2 my-lg-0"
+<form asp-controller="Admin" action="Admin/LineChart" id="userOptionsForm" class="form-inline my-2 my-lg-0"
           method="post">
         <select asp-for="@Model.OrderBy" class="form-control-custom" asp-items="@Model.availableMonths">
             <option>Välj månad </option>
@@ -37,7 +37,7 @@
 
 <div id="lineChartDiv" class="box-body">
 
-    <div class="barChart-container">
+    <div id="barChart-container" class="barChart-container">
         <canvas id="chart" style="width:100%; height:500px"></canvas>
     </div>
 </div>

@@ -1,4 +1,5 @@
-﻿using NackowskisAuctionHouse.ChartViewModels;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using NackowskisAuctionHouse.ChartViewModels;
 using NackowskisAuctionHouse.DAL.Models;
 using NackowskisAuctionHouse.ViewModels;
 using System;
@@ -28,8 +29,10 @@ namespace NackowskisAuctionHouse.BusinessLayer
 
         //line chart
         Task<List<ChartVM>> GetDataSet(List<Auction> auctions, List<List<Bid>> bids);
-        Task<DashboardVM> ActivityLineChart(int month, string userName);
-        List<string> getAvailableMonths(List<Auction> auctions);
+        Task<DashboardVM> ActivityBarChart(int month, string userName);
+        List<SelectListItem> GetAvailableMonthsSelectList(List<Auction> auctions);
+        Task<List<SelectListItem>> GetAvailableMonthsSelectList();
+        List<SelectListItem> GetUserOptionsSelectList(string userName);
 
     }
 }

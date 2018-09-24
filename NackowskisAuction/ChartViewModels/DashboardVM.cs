@@ -8,6 +8,13 @@ namespace NackowskisAuctionHouse.ChartViewModels
 {
     public class DashboardVM
     {
+        public DashboardVM()
+        {
+            availableMonths = new List<SelectListItem>();
+            userOptions = new List<SelectListItem>();
+            DataSets = new List<ChartVM>();
+        }
+
         public List<SelectListItem> availableMonths { get; set; }
         public List<SelectListItem> userOptions { get; set; }
         public List<ChartVM> DataSets { get; set; }

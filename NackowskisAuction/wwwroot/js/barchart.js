@@ -1,11 +1,81 @@
-﻿$(document).ready(function () {
-    var labels = [];
-    var yValues = [];
-    var speed = 250;
-    var charts = [];
-    var value = 0;
-    var samples = 100;
-    var ctx = document.getElementById("chart").getContext('2d');
+﻿var labels = [];
+var yValues = [];
+var speed = 250;
+var charts = [];
+var value = 0;
+var samples = 100;
+var ctx = document.getElementById("chart").getContext('2d');
+
+var data = {
+    labels: labels,
+    datasets: [{
+        label: "Auktion differans",
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 0, 0)',
+            'rgba(0, 255, 0)',
+            'rgba(0, 0, 255)',
+            'rgba(192, 192, 192)',
+            'rgba(255, 255, 0)',
+            'rgba(255, 0, 255)'
+        ],
+        borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(255, 0, 0)',
+            'rgba(0, 255, 0)',
+            'rgba(0, 0, 255)',
+            'rgba(192, 192, 192)',
+            'rgba(255, 255, 0)',
+            'rgba(255, 0, 255)'
+        ],
+        borderWidth: 1,
+        data: yValues,
+    }]
+};
+var options = {
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            ticks: {
+                min: 0,
+                beginAtZero: true
+            },
+            gridLines: {
+                display: true,
+                color: "rgba(255,99,164,0.2)"
+            }
+        }],
+        xAxes: [{
+            ticks: {
+                min: 0,
+                beginAtZero: true
+            },
+            gridLines: {
+                display: false
+            }
+        }]
+    }
+};
+
+var chart = new Chart(ctx, {
+    options: options,
+    data: data,
+    type: 'bar'
+
+});
+
+$(document).ready(function () {
+    
 
     $.getJSON('/Admin/GetDataSet', { get_param: '' }, function (data) {
 
@@ -15,219 +85,281 @@
                 labels.push(element.dimensionOne);
                 yValues.push(element.quantity);
             });
-            console.log("labels", labels);
-            console.log("yvalues", yValues);
+           
+
+            chart.update();
+        });
+       
+        
+    });
+    
+
+        //var myChart = new Chart(ctx,
+        //    {
+        //        type: 'bar',
+        //        data: {
+        //            labels: labels,
+        //            datasets: [
+        //                {
+        //                    data: yValues,
+        //                    backgroundColor: [
+        //                        'rgba(255, 99, 132, 0.2)',
+        //                        'rgba(54, 162, 235, 0.2)',
+        //                        'rgba(255, 206, 86, 0.2)',
+        //                        'rgba(75, 192, 192, 0.2)',
+        //                        'rgba(153, 102, 255, 0.2)',
+        //                        'rgba(255, 159, 64, 0.2)',
+        //                        'rgba(255, 0, 0)',
+        //                        'rgba(0, 255, 0)',
+        //                        'rgba(0, 0, 255)',
+        //                        'rgba(192, 192, 192)',
+        //                        'rgba(255, 255, 0)',
+        //                        'rgba(255, 0, 255)'
+        //                    ],
+        //                    borderColor: [
+        //                        'rgba(255,99,132,1)',
+        //                        'rgba(54, 162, 235, 1)',
+        //                        'rgba(255, 206, 86, 1)',
+        //                        'rgba(75, 192, 192, 1)',
+        //                        'rgba(153, 102, 255, 1)',
+        //                        'rgba(255, 159, 64, 1)',
+        //                        'rgba(255, 0, 0)',
+        //                        'rgba(0, 255, 0)',
+        //                        'rgba(0, 0, 255)',
+        //                        'rgba(192, 192, 192)',
+        //                        'rgba(255, 255, 0)',
+        //                        'rgba(255, 0, 255)'
+        //                    ],
+        //                    borderWidth: 1
+        //                }
+        //            ]
+        //        },
+        //        options: {
+        //            maintainAspectRatio: false,
+        //            scales: {
+        //                yAxes: [{
+        //                    ticks: {
+        //                        min: 0,
+        //                        beginAtZero: true
+        //                    },
+        //                    gridLines: {
+        //                        display: true,
+        //                        color: "rgba(255,99,164,0.2)"
+        //                    }
+        //                }],
+        //                xAxes: [{
+        //                    ticks: {
+        //                        min: 0,
+        //                        beginAtZero: true
+        //                    },
+        //                    gridLines: {
+        //                        display: false
+        //                    }
+        //                }]
+        //            }
+        //        }
+        //    });
 
 
+
+    
+        
+        
+
+    
+   
+
+    //function addData(chartID, label, data) {
+    //    var ctx = document.getElementById(chartID).getContext('2d');
+    //    var newChartData = {};
+    //    newChartData.type = "bar";
+    //    newChartData.data = {};
+    //    newChartData.data.labels = labels;
+    //    newChartData.data.datasets = [];
+    //    //$.each(data.data.dataSets, function(index, element) {
+    //    //    var temp = element.quantity;
+    //    //    $.each(temp, function(index, element) {
+    //    //        var tempi = element;
+    //    //        newChartData.data.datasets.push(element.quantity);
+    //    //    });
+    //    //});
+    //    newChartData.data.datasets.push(data);
+    //    //var myChart = new Chart(ctx, newChartData);
+    //    var chart = new Chart(ctx, {
+    //        options: options,
+    //        data: data,
+    //        type: 'bar'
+
+    //    });
+    //    chart.update();
+    //}
+    
+    
+   
+    function removeData(chart) {
+        chart.data.labels.pop();
+        var temp = chart.data;
+        Array.prototype.forEach.call(chart.data.children, child => {
+            console.log(child);
+        });
+        //chart.data.datasets.foreEach((dataset) => {
+        //    dataset.data.pop();
+        //});
+        
+        chart.update();
+    } 
+
+    function addData(chart, label, data) {
+        chart.data.labels.push(label);
+        chart.data.datasets.foreEach((dataset) => {
+            dataset.data.push(data);
         });
         chart.update();
-    });
-    var chart = new Chart(ctx,
-        {
-            type: 'bar',
+    } 
+    
+
+
+
+
+    var dataType = 'application/json; charset=utf-8';
+
+    $('#userOptionDropdown').change(function () {
+        var username = $(this).val();
+        $("#userOptionsForm").ajaxSubmit({
+            url: '/Admin/GetDataSet',
+            type: 'post',
+            contentType: dataType,
             data: {
-                labels: labels,
-                datasets: [
-                    {
-                        data: yValues,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)',
-                            'rgba(255, 206, 86, 0.2)',
-                            'rgba(75, 192, 192, 0.2)',
-                            'rgba(153, 102, 255, 0.2)',
-                            'rgba(255, 159, 64, 0.2)',
-                            'rgba(255, 0, 0)',
-                            'rgba(0, 255, 0)',
-                            'rgba(0, 0, 255)',
-                            'rgba(192, 192, 192)',
-                            'rgba(255, 255, 0)',
-                            'rgba(255, 0, 255)'
-                        ],
-                        borderColor: [
-                            'rgba(255,99,132,1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(255, 0, 0)',
-                            'rgba(0, 255, 0)',
-                            'rgba(0, 0, 255)',
-                            'rgba(192, 192, 192)',
-                            'rgba(255, 255, 0)',
-                            'rgba(255, 0, 255)'
-                        ],
-                        borderWidth: 1
-                    }
-                ]
+                userToShow: username,
+                monthToShow: $("#availableMonthsDropdown").val()
             },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            display: true,
-                            color: "rgba(255,99,164,0.2)"
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            min: 0,
-                            beginAtZero: true
-                        },
-                        gridLines: {
-                            display: false
-                        }
-                    }]
-                }
+            success: function (data) {
+                
+                    removeData(chart);
+                
+                
+                $.each(data, function (index, element) {
+                    $.each(element.dataSets, function (index, element) {
+                        addData(chart, element.dimensionOne, element.quantity);
+                    });
+                });
+                
+               
+                    chart.update();
+                
+                
+
             }
         });
-   
-    function updateChart() {
-        
-    }    
-    
+
+    });
+    $('#availableMonthsDropdown').change(function () {
+        var month = $(this).val();
+        $("#availableMonthsForm").ajaxSubmit({
+            url: '/Admin/GetDataSet',
+            type: 'post',
+            contentType: dataType,
+            data: {
+                userToShow: $("#userOptionDropdown").val(),
+                monthToShow: month
+            },
+            success: function (data) {
+                removeData(ctx);
+                $.each(data, function (index, element) {
+
+                    $.each(element.dataSets, function (index, element) {
+                        addData(ctx, element.dimensionOne, element.quantity);
+
+                    });
+                    
+
+
+                });
+           
+            }
+        });
+
+    });
    
 });
 
 
+////Testa 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//document.addEventListener('DOMContentLoaded', function () {
-    
-//    var values = [];
-//    var labels = [];
-
-    
-
-//    function GetDataSet() {
-//        debugger
-//        $.ajax({
-//            type: "GET",
-//            url: "/Admin/GetDataSet",
-//            data: {},
-//            contentType: "application/json;charset=utf-8",
-//            dataType: "json",
-//            success: function (result) {
-//                debugger;
-//                values.push(result.Datasets.Quantity);
-//                labels.push(result.Datasets.DimensionOne);
-//            },
-//            error: function (response) {
-//                debugger;
-//                alert('eror');
-//            }
-//        });
-
-//        $(document).ready(function () {
-//            debugger
-//            GetDataSet();
-//        });
-
-
-    
-
-    
-
-//    var chart = new Chart(document.getElementById("chart"),
-//        {
-//            type: 'line',
-//            data: {
-//                labels: labels,
-//                datasets: [
-//                    {
-//                        data: values,
-//                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
-//                        borderColor: 'rgb(255, 99, 132)',
-//                        borderWidth: 2,
-//                        lineTension: 0.25,
-//                        pointRadius: 0
-//                    }
-//                ]
-//            },
-//            options: {
-//                responsive: false,
-//                animation: {
-//                    duration: speed * 1.5,
-//                    easing: 'linear'
+//    var data = {
+//        labels: labels,
+//    datasets: [{
+//        label: "Countries Chart",
+//        backgroundColor: [
+//            'rgba(255, 99, 132, 0.2)',
+//            'rgba(54, 162, 235, 0.2)',
+//            'rgba(255, 206, 86, 0.2)',
+//            'rgba(75, 192, 192, 0.2)',
+//            'rgba(153, 102, 255, 0.2)',
+//            'rgba(255, 159, 64, 0.2)',
+//            'rgba(255, 0, 0)',
+//            'rgba(0, 255, 0)',
+//            'rgba(0, 0, 255)',
+//            'rgba(192, 192, 192)',
+//            'rgba(255, 255, 0)',
+//            'rgba(255, 0, 255)'
+//        ],
+//        borderColor: [
+//            'rgba(255,99,132,1)',
+//            'rgba(54, 162, 235, 1)',
+//            'rgba(255, 206, 86, 1)',
+//            'rgba(75, 192, 192, 1)',
+//            'rgba(153, 102, 255, 1)',
+//            'rgba(255, 159, 64, 1)',
+//            'rgba(255, 0, 0)',
+//            'rgba(0, 255, 0)',
+//            'rgba(0, 0, 255)',
+//            'rgba(192, 192, 192)',
+//            'rgba(255, 255, 0)',
+//            'rgba(255, 0, 255)'
+//        ],
+//        borderWidth: 1,
+//        data: yValues,
+//        }]
+//};
+//    var options = {
+//        maintainAspectRatio: false,
+//        scales: {
+//            yAxes: [{
+//                ticks: {
+//                    min: 0,
+//                    beginAtZero: true
 //                },
-//                legend: false,
-//                scales: {
-//                    xAxes: [
-//                        {
-//                            display: false
-//                        }
-//                    ],
-//                    yAxes: [
-//                        {
-//                            ticks: {
-//                                max: 1,
-//                                min: -1
-//                            }
-//                        }
-//                    ]
+//                gridLines: {
+//                    display: true,
+//                    color: "rgba(255,99,164,0.2)"
 //                }
-//            }
-//        });
-
-//        $('#availableMonthsDropdown').change(function () {
-//            var month = $(this).val();
-//            $("#availableMonthsForm").ajaxSubmit({
-//                url: '/Admin/GetDataSet',
-//                type: 'post',
-//                contentType: "application/json;charset=utf-8",
-//                data: {
-//                    userToShow: $("#userOptionDropdown").val(),
-//                    monthToShow: month
+//            }],
+//            xAxes: [{
+//                ticks: {
+//                    min: 0,
+//                    beginAtZero: true
 //                },
-//                success: function (data) {
-//                    debugger
-//                    values.push(data.DataSets.Quantity);
-//                    labels.push(data.Datasets.DimensionOne);
-//                    chart.update();
- 
+//                gridLines: {
+//                    display: false
 //                }
-//            });
-
-//        });
-
-//    //connection.on('Broadcast',
-//    //    function (sender, message) {
-//    //        values.push(message.value);
-//    //        values.shift();
-
-//    //        chart.update();
-//    //    });
-
-//    //connection.start();
+//            }]
+//        }
 //    };
-//});
+//    function DrawChart() {
+//        var chart = new Chart(ctx, {
+//            options: options,
+//            data: data,
+//            type: 'bar'
+
+//        });
+//        chart.update();
+//        return chart;
+
+//    }
+        
 
 
 
@@ -239,79 +371,14 @@
 
 
 
-////$(document).ready(function () {
-////$(function () {
-////    var chartName = "barChart";
-////    var ctx = document.getElementById(chartName).getContext('2d');
-////    var data = {
-////        labels: @Html.Raw(XLabels),
-////        datasets: [{
-////            label: "Differans",
-////            backgroundColor: [
-////                'rgba(255, 99, 132, 0.2)',
-////                'rgba(54, 162, 235, 0.2)',
-////                'rgba(255, 206, 86, 0.2)',
-////                'rgba(75, 192, 192, 0.2)',
-////                'rgba(153, 102, 255, 0.2)',
-////                'rgba(255, 159, 64, 0.2)',
-////                'rgba(255, 0, 0)',
-////                'rgba(0, 255, 0)',
-////                'rgba(0, 0, 255)',
-////                'rgba(192, 192, 192)',
-////                'rgba(255, 255, 0)',
-////                'rgba(255, 0, 255)'
-////            ],
-////            borderColor: [
-////                'rgba(255,99,132,1)',
-////                'rgba(54, 162, 235, 1)',
-////                'rgba(255, 206, 86, 1)',
-////                'rgba(75, 192, 192, 1)',
-////                'rgba(153, 102, 255, 1)',
-////                'rgba(255, 159, 64, 1)',
-////                'rgba(255, 0, 0)',
-////                'rgba(0, 255, 0)',
-////                'rgba(0, 0, 255)',
-////                'rgba(192, 192, 192)',
-////                'rgba(255, 255, 0)',
-////                'rgba(255, 0, 255)'
-////            ],
-////            borderWidth: 1,
-////            /**/
-////        data: @Html.Raw(YValues),
-////            /**/
-////        }]
-////    };
 
-////    var options = {
-////        maintainAspectRatio: false,
-////        scales: {
-////            yAxes: [{
-////                ticks: {
-////                    min: 0,
-////                    beginAtZero: true
-////                },
-////                gridLines: {
-////                    display: true,
-////                    color: "rgba(255,99,164,0.2)"
-////                }
-////            }],
-////            xAxes: [{
-////                ticks: {
-////                    min: 0,
-////                    beginAtZero: true
-////                },
-////                gridLines: {
-////                    display: false
-////                }
-////            }]
-////        }
-////    };
 
-////    var myChart = new Chart(ctx, {
-////        options: options,
-////        data: data,
-////        type: 'bar'
 
-////    });
-////});
-////}
+
+
+
+
+
+
+
+

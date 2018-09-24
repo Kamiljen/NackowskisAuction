@@ -31,22 +31,36 @@ namespace NackowskisAuctionHouse.Controllers
             return View();
         }
 
-        public IActionResult BarChart()
+        public async  Task<IActionResult> BarChart()
         {
-            return View();
+            var model = new DashboardVM();  
+            model.userToShow = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            model.monthToShow = int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)).ToString();
+            model.availableMonths = await _businessService.GetAvailableMonthsSelectList();
+            model.userOptions =  _businessService.GetUserOptionsSelectList(model.userToShow);
+            return View(model);
         }
-
+        [HttpGet]
         public async Task<JsonResult> GetDataSet()
         {
             var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var date = int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2));
-            var data = await _businessService.ActivityLineChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
+            var data = await _businessService.ActivityBarChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
+            
             return Json (new { data });
+        }
+        [HttpPost]
+        public async Task<JsonResult> GetDataSet(DashboardVM input)
+        {
+            var date = (int.Parse(input.monthToShow) == 0) ? int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)) : int.Parse(input.monthToShow);
+
+            var data = await _businessService.ActivityBarChart(date, input.userToShow);
+            return Json(new { data });
         }
 
         //public async Task<IActionResult> GetDataSet()
         //{
-            
+
         //    var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
         //    var date = int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2));
         //    var data = await _businessService.ActivityLineChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
@@ -69,15 +83,15 @@ namespace NackowskisAuctionHouse.Controllers
         //    var data = await _businessService.ActivityLineChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
         //    return View(data);
         //}
-        [HttpPost]
-        public async Task<IActionResult> LineChart(DashboardVM input)
-        {
+        //[HttpPost]
+        //public async Task<IActionResult> LineChart(DashboardVM input)
+        //{
 
-            var date = (int.Parse(input.monthToShow) == 0) ? int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)) : int.Parse(input.monthToShow);
+        //    var date = (int.Parse(input.monthToShow) == 0) ? int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)) : int.Parse(input.monthToShow);
 
-            var data = await _businessService.ActivityLineChart(date, input.userToShow);
-            return PartialView("_LineChartPartial", data);
-        }
+        //    var data = await _businessService.ActivityLineChart(date, input.userToShow);
+        //    return PartialView("_LineChartPartial", data);
+        //}
 
         //public IActionResult CreateAuction(Auction inputModel, string rule = "")
         //{
