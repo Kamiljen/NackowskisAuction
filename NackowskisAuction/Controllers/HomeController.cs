@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using NackowskisAuction.Models;
 using NackowskisAuctionHouse.BusinessLayer;
 using NackowskisAuctionHouse.DAL.Models;
+using NackowskisAuctionHouse.Hubs;
 using NackowskisAuctionHouse.ViewModels;
 
 namespace NackowskisAuctionHouse.Controllers
@@ -15,10 +17,11 @@ namespace NackowskisAuctionHouse.Controllers
     public class HomeController : Controller
     {
         private IBusinessService _businessService;
-
-        public HomeController(IBusinessService businessService)
+        private readonly IHubContext<NotificationHub> _hubContext;
+        public HomeController(IBusinessService businessService, IHubContext<NotificationHub> hubContext)
         {
             _businessService = businessService;
+            _hubContext = hubContext;
         }
 
 
@@ -68,7 +71,10 @@ namespace NackowskisAuctionHouse.Controllers
                 if (bid.bidSum < bid.oldBid)
                 {
                     var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
-                    
+                    if (result.IsSuccessStatusCode)
+                    {
+                        await _hubContext
+                    }
                 }
                 else
                 {

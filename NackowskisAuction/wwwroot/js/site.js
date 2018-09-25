@@ -76,40 +76,7 @@ $(function () {
 //Barchart dropdown select ajax calls
 var dataType = 'application/json; charset=utf-8';
 
-//$('#userOptionDropdown').change(function () {
-//    var username = $(this).val();
-//    $("#userOptionsForm").ajaxSubmit({
-//        url: '/Admin/LineChart',
-//        type: 'post',
-//        contentType: dataType,
-//        data: {
-//            userToShow: username,
-//            monthToShow: $("#availableMonthsDropdown").val()
-//        },
-//        success: function (data) {
-//            $('#lineChartDiv').empty();
-//            $('#lineChartDiv').html(data);
-//        }
-//    });
-    
-//});
-//$('#availableMonthsDropdown').change(function () {
-//    var month = $(this).val();
-//    $("#availableMonthsForm").ajaxSubmit({
-//        url: '/Admin/LineChart',
-//        type: 'post',
-//        contentType: dataType,
-//        data: {
-//            userToShow: $("#userOptionDropdown").val(),
-//            monthToShow: month
-//        },
-//        success: function (data) {
-//            $('#lineChartDiv').empty();
-//            $('#lineChartDiv').html(data);
-//        }
-//    });
 
-//});
 
 $('#orderByDropdown').change(function () {
     var orderBy = $(this).val();

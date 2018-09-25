@@ -15,6 +15,7 @@ using NackowskisAuctionHouse;
 using NackowskisAuctionHouse.BusinessLayer;
 using NackowskisAuctionHouse.DAL.DbContext;
 using NackowskisAuctionHouse.DAL.IdentityModels;
+using NackowskisAuctionHouse.Hubs;
 using NackowskisAuctionHouse.IdentityService;
 
 namespace NackowskisAuctionHouse
@@ -54,6 +55,7 @@ namespace NackowskisAuctionHouse
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IIdentityService, IdentityService.IdentityService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +81,10 @@ namespace NackowskisAuctionHouse
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotificationHub>("/notificationHub");
             });
             ApplicationDbInitializer.SeedUsers(userManager);
         }
