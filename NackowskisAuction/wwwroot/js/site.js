@@ -52,9 +52,10 @@ $(function () {
         var dataToSend = form.serialize();
 
         $.post(actionUrl, dataToSend).done(function (data) {
+            debugger
             var newBody = $('.modal-body', data);
             placeholderElement.find('.modal-body').replaceWith(newBody);
-
+            
             // find IsValid input field and check it's value
             // if it's valid then hide modal window
             var isValid = newBody.find('[name="IsValid"]').val() == 'True';
@@ -73,7 +74,7 @@ $(function () {
 
 
 //Barchart dropdown select ajax calls
-//var dataType = 'application/json; charset=utf-8';
+var dataType = 'application/json; charset=utf-8';
 
 //$('#userOptionDropdown').change(function () {
 //    var username = $(this).val();

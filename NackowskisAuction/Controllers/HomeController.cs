@@ -40,7 +40,7 @@ namespace NackowskisAuctionHouse.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var auctions = await _businessService.GetAuctions();
+            var auctions = await _businessService.GetActiveAuctionsAndBids();
 
             return View(auctions);
         }
@@ -63,14 +63,23 @@ namespace NackowskisAuctionHouse.Controllers
         public async Task<IActionResult> PlaceBid(BidVM bid)
         {
             //returnUrl = returnUrl ?? Url.Content("~/");
-            //if (ModelState.IsValid)
-            //{
-            
-                var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
-                return PartialView("_HighestBidPartial", bid.bidSum);
-           
+            if (ModelState.IsValid)
+            {
+                if (bid.bidSum < bid.oldBid)
+                {
+                    var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
+                    
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "budet måste vara högre än det högsta budet");
+                }
+               
+            }
+            return View("GetAuction", bid.auctionId);
 
-            
+
+
         }
         [HttpPost]
         public async Task<IActionResult> FindAcutionsWithParams(SearchVM model)
@@ -83,7 +92,7 @@ namespace NackowskisAuctionHouse.Controllers
 
 
 
-        public async Task<IActionResult> FindAuctions(string searchString, string searchParam)
+        public async Task<IActionResult> FindAuctions(string searchString = " ", string searchParam = " ")
         {
             var result = await  _businessService.FindAuctions(searchParam, "", searchString);
             result.SearchString = searchString;

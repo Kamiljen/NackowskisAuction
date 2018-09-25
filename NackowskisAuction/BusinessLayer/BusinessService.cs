@@ -23,10 +23,20 @@ namespace NackowskisAuctionHouse.BusinessLayer
             _api = new NackowskisApi();
         }
 
-        public Task<HttpResponseMessage> CreateAuction(Auction model)
+        public Task<HttpResponseMessage> CreateAuction(CreateAuctionVM model)
         {
+            var apiModel = new Auction {
+                Titel = model.Titel,
+                Beskrivning = model.Beskrivning,
+                StartDatumString = model.StartDatum.Add(model.SlutTid).ToString("yyyy-MM-dd HH:mm:ss"),
+                SlutDatumString = model.SlutDatum.Add(model.StartTid).ToString("yyyy-MM-dd HH:mm:ss"),
+                Utropspris = model.Utropspris,
+                SkapadAv = model.SkapadAv,
+                Gruppkod = model.Gruppkod
+        };
+            
 
-            return _api.CreateAuction(model);
+            return _api.CreateAuction(apiModel);
         }
 
         public Task<HttpResponseMessage> CreateBid(int auctionId, int sum, string user)
@@ -34,6 +44,29 @@ namespace NackowskisAuctionHouse.BusinessLayer
             var model = new Bid { AuktionID = auctionId, Summa = sum, Budgivare = user };
             return _api.CreateBid(model);
         }
+
+        public async Task<AuctionsWithBidsVM> GetActiveAuctionsAndBids()
+        {
+            var model = new AuctionsWithBidsVM();
+            var auctions = await GetAuctions();
+            var activeAuctions = auctions.Where(x => DateTime.Parse(x.SlutDatumString) > DateTime.Today);
+            foreach (var auction in activeAuctions)
+            {
+                var tempBids = await GetBids(auction.AuktionID);
+
+                var highestBid = (tempBids.Count != 0) ? tempBids.OrderByDescending(x => x.Summa).First().Summa :  0;
+                
+                model.Auctions.Add(new AuctionWithBidsVM
+                {
+                    Auction = auction,
+                    HighestBid = highestBid
+                });
+
+            }
+
+            return model;
+        }
+
 
         public Task<HttpResponseMessage> DeleteAuction(int auctionId)
         {
@@ -59,7 +92,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             var filteredAuctions = allAuctions
                 .WhereIf(searchParam == "Titel", x => x.Titel.ToLower().Contains(searchString.ToLower()))
                 .WhereIf(searchParam == "Beskrivning", x => x.Beskrivning.ToLower().Contains(searchString.ToLower()))
-                .WhereIf(string.IsNullOrEmpty(searchParam), x => x.Titel.ToLower().Contains(searchString.ToLower()) || x.Beskrivning.ToLower().Contains(searchString.ToLower())).ToList();
+                .Where( x => x.Titel.ToLower().Contains(searchString.ToLower()) || x.Beskrivning.ToLower().Contains(searchString.ToLower())).ToList();
                 
 
             foreach (var auction in filteredAuctions)
@@ -86,32 +119,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return searchResults;
         }
 
-        //public async Task<DashboardVM> ActivityLineChart(int month, string userName)
-        //{
-        //    var controllerSet = new DashboardVM();
-        //    var alAuctions = await _api.GetAuctions();
-        //    var selectedDates = alAuctions.WhereIf(month != 0 ,x => DateTime.Parse(x.SlutDatumString).Month == month)
-        //        .WhereIf( userName != "Alla", x =>x.SkapadAv == userName)
-        //        .ToList();
-        //    var bids = await GetBids(selectedDates);
-        //    controllerSet.DataSets = await GetDataSet(selectedDates, bids);
-        //    var availableMonths = getAvailableMonths(alAuctions);
-        //    controllerSet.availableMonths = new List<SelectListItem>();
-        //    foreach (var date in availableMonths)
-        //    {
-                
-        //        controllerSet.availableMonths.Add(new SelectListItem {
-        //            Text = new DateTime(2018, int.Parse(date), 1).ToString("MMMM", CultureInfo.CreateSpecificCulture("sv")),
-        //            Value = date
-        //            });
-        //    }
-        //    controllerSet.userOptions = new List<SelectListItem>();
-        //    controllerSet.userOptions.Add(new SelectListItem { Text = "Alla användare", Value = "Alla" });
-        //    controllerSet.userOptions.Add(new SelectListItem { Text = userName, Value = userName });
-        //    return controllerSet;
-        //}
-
-        
+      
 
         public async Task<DashboardVM> ActivityBarChart(int month, string userName)
         {
@@ -236,6 +244,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             if (bids.Count != 0)
             {
                 model.Bids = bids;
+                model.HighestBid = bids.OrderByDescending(x => x.Summa).First().Summa;
             }
             else
             {
@@ -245,6 +254,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             model.Auction = await _api.GetAuction(auctionId);
             model.Auction.SlutDatum = Convert.ToDateTime(model.Auction.SlutDatumString);
             model.Auction.StartDatum = Convert.ToDateTime(model.Auction.StartDatumString);
+             
             
             return model;
         }

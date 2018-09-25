@@ -14,7 +14,7 @@ using System.Security.Claims;
 
 namespace NackowskisAuctionHouse.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private IBusinessService _businessService;
@@ -58,63 +58,18 @@ namespace NackowskisAuctionHouse.Controllers
             return Json(new { data });
         }
 
-        //public async Task<IActionResult> GetDataSet()
-        //{
-
-        //    var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-        //    var date = int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2));
-        //    var data = await _businessService.ActivityLineChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
-        //    return View(data);
-
-        //}
-        //[HttpPost]
-        //public async Task<JsonResult> GetDataSet(DashboardVM input)
-        //{
-
-        //    var date = (int.Parse(input.monthToShow) == 0) ? int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)) : int.Parse(input.monthToShow);
-
-        //    var data = await _businessService.ActivityLineChart(date, input.userToShow);
-        //    return Json (new { data});
-        //}
-        //public async Task<IActionResult> LineChart()
-        //{
-        //    var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-        //    var date = int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2));
-        //    var data = await _businessService.ActivityLineChart(date, HttpContext.User.FindFirstValue(ClaimTypes.Name));
-        //    return View(data);
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> LineChart(DashboardVM input)
-        //{
-
-        //    var date = (int.Parse(input.monthToShow) == 0) ? int.Parse(DateTime.Now.ToString("MM-dd-yyyy").Substring(0, 2)) : int.Parse(input.monthToShow);
-
-        //    var data = await _businessService.ActivityLineChart(date, input.userToShow);
-        //    return PartialView("_LineChartPartial", data);
-        //}
-
-        //public IActionResult CreateAuction(Auction inputModel, string rule = "")
-        //{
-        //    var model = new Auction();
-        //    if (inputModel != null)
-        //    {
-        //        model = inputModel;
-        //    }
-
-        //    return View(model);
-        //}
+        
         public async Task<IActionResult> Users()
         {
             return View(await _userService.GetUsersInRoleAsync());
         }
 
-        
-        public async Task<IActionResult> CreateAuction(Auction model)
+     
+        public async Task<IActionResult> CreateAuction(CreateAuctionVM model)
         {
             if (ModelState.IsValid)
             {
-                model.SlutDatumString = model.SlutDatum.Add(model.StartTid).ToString("yyyy-MM-dd HH:mm:ss");
-                model.StartDatumString = model.StartDatum.Add(model.SlutTid).ToString("yyyy-MM-dd HH:mm:ss");
+                
                 var result = await _businessService.CreateAuction(model);
                 if (result.IsSuccessStatusCode)
                 {

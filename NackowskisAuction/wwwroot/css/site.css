@@ -51,7 +51,7 @@ headerContainer {
 
 #mainCarousel {
     margin-top: 15px;
-    height: 500px;
+    height: 500px !important;
     width: auto;
 }
 

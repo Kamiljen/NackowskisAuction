@@ -8,7 +8,7 @@
 
 @if (Model.Bids.Count > 1)
 {
-    @await Component.InvokeAsync("BidCalculator", new { bidSum = highestBid.Summa, auctionId = Model.Auction.AuktionID })
+    @await Component.InvokeAsync("BidCalculator", new { bidSum = Model.HighestBid.ToString(), auctionId = Model.Auction.AuktionID })
 }
 else
 {

@@ -12,12 +12,13 @@ namespace NackowskisAuctionHouse.BusinessLayer
 {
     public interface IBusinessService
     {
-        Task<HttpResponseMessage> CreateAuction(Auction model);
+        Task<HttpResponseMessage> CreateAuction(CreateAuctionVM model);
         Task<HttpResponseMessage> EditAuction(Auction model);
         Task<HttpResponseMessage> DeleteBid(int bidId);
         Task<HttpResponseMessage> DeleteAuction(int auctionId);
 
         Task<HttpResponseMessage> CreateBid(int auctionId, int sum, string user);
+        Task<AuctionsWithBidsVM> GetActiveAuctionsAndBids();
 
         Task<SearchResultVM> FindAuctions(string searchParam, string orderBy, string searchString = "");
         Task<List<Auction>> GetAuctions();

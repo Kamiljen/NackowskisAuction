@@ -51,7 +51,8 @@ namespace NackowskisAuctionHouse.Controllers
 
                 if (user != null)
                 {
-                    _userService.SignInAsync(user, true);
+                   var result = await _userService.SignInAsync(user, true);
+                    
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace NackowskisAuctionHouse.Controllers
         {
              _userService.SignOut();
 
-            return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://gustavcleveman.azurewebsites.net/");
+            return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://nackowksis.azurewebsites.net");
         }
 
         [HttpPost]

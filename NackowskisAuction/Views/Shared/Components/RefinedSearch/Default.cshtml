@@ -2,17 +2,20 @@
 
 
 @model SearchVM
-<div class="row mr-auto">
-    <div class="col-lg-12">
+<div class="col-lg-12">
+    <div class="row mr">
+
         <div class="col-sm">
             <form id="searchParamsForm"
                   method="post" enctype="multipart/form-data">
+                <label>Sök på</label>
                 <select class="form-control-custom" asp-items="@Model.SearchParams" id="searchParamsDropdown"></select>
             </form>
         </div>
         <div class="col-sm">
             <form id="orderByForm"
                   method="post" enctype="multipart/form-data">
+                <label >Sortering</label>
                 <select class="form-control-custom" asp-items="@Model.OrderBys" id="orderByDropdown" selected="@Model.OrderBy"></select>
             </form>
         </div>
@@ -20,11 +23,12 @@
             <div class="form-group">
                 <form id="searchForm"
                       method="post" enctype="multipart/form-data">
-                    <input class="form-control mr-sm-2" name="searchString" id="searchInput" type="text" placeholder="Sök" aria-label="Sök" value="@Model.SearchString">
+                    <input class="form-control mr-sm-2" width="20" name="searchString" id="searchInput" type="text" placeholder="Sök" aria-label="Sök" value="@Model.SearchString">
                     <button class="btn my-2 my-sm-0 form-control" type="submit" id="searchSubmit"><i class="fas fa-search"></i></button>
                 </form>
             </div>
         </div>
+
     </div>
 </div>
 

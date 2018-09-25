@@ -27,12 +27,46 @@ namespace NackowskisAuctionHouse.IdentityService
         {
             var model = new List<UserVM>();
             var roles = _roleManager.Roles.ToList();
+            var users = _userManager.Users;
 
-            foreach (var roleName in roles)
+            var regularModel = new UserVM { Role = "Regular"};
+            var adminModel = new UserVM { Role = "Admin" };
+            var adminUsers = new List<AppUser>();
+            var regualrUsers = new List<AppUser>();
+
+            foreach (var user in users)
             {
-                var tempUsers = await _userManager.GetUsersInRoleAsync(roleName.Name);
-                model.Add(new UserVM { Role = roleName.Name, Users = tempUsers.ToList()});
+                //_userManager.IsInRoleAsync("Regular")
+                var result = await _userManager.GetRolesAsync(user);
+                if (result.Count != 0)
+                {
+                    if (result.First() == "Admin")
+                    {
+                        adminUsers.Add(user);
+                    }
+                    else 
+                    {
+                        regualrUsers.Add(user);
+                    }
+                }
+                else
+                {
+
+                    var result2 = await _userManager.AddToRoleAsync(user, "Regular");
+                    regualrUsers.Add(user);
+                }
+               
+
             }
+            adminModel.Users = adminUsers;
+            regularModel.Users = regualrUsers;
+            model.Add(adminModel);
+            model.Add(regularModel);
+            //foreach (var roleName in roles)
+            //{
+            //    var tempUsers = await _userManager.GetUsersInRoleAsync(roleName.Name);
+            //    model.Add(new UserVM { Role = roleName.Name, Users = tempUsers.ToList()});
+            //}
             return model;
         }
 
@@ -70,9 +104,10 @@ namespace NackowskisAuctionHouse.IdentityService
           
         }
 
-        public async void SignInAsync(AppUser user, bool isPersistent)
+        public async Task<string> SignInAsync(AppUser user, bool isPersistent)
         {
             await _signInManager.SignInAsync(user, isPersistent);
+            return "finnished!";
 
         }
         public async Task<SignInResult> SignInAsync(SignInVM Input)

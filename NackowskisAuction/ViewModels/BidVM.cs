@@ -12,9 +12,11 @@ namespace NackowskisAuctionHouse.ViewModels
         public int calculatedSum { get; set; }
         public int auctionId { get; set; }
 
-        [ValidBid]
+        [Required]
         [Display(Name="Ditt bud")]
         public int bidSum { get; set; }
-        
+        public int oldBid { get; set; }
+
+
     }
 }

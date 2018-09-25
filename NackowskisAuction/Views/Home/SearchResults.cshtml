@@ -9,32 +9,34 @@
 
 
 <h3 class="card-title">Sök resultat för : </h3>
-@await Component.InvokeAsync("RefinedSearch", new { searchString = Model.SearchString })
-<div id="searchList2">
-    <table class="table">
 
-        <tr>
-            <th scope="row">Titel</th>
-            <th>Utropspris</th>
-            <th>Aktuellt bud</th>
-            <th>Slut datum</th>
-        </tr>
+    @await Component.InvokeAsync("RefinedSearch", new { searchString = Model.SearchString })
+        
+    <div id="searchList2">
+        <table class="table">
 
-
-
-        @foreach (var item in Model.Results)
-        {
-            var highestBid = item.Bids.OrderBy(x => x.Summa).First();
-            var temp = (highestBid.Summa != 0) ? highestBid.Summa.ToString() : "Inga bud";
             <tr>
-                <td scope="row"><a asp-action="GetAuction" asp-route-auctionid="@item.Auction.AuktionID">@item.Auction.Titel</a></td>
-                <td>@item.Auction.Utropspris</td>
-                <td>@temp</td>
-                <td>@item.Auction.SlutDatum</td>
+                <th scope="row">Titel</th>
+                <th>Utropspris</th>
+                <th>Aktuellt bud</th>
+                <th>Slut datum</th>
             </tr>
-        }
 
-    </table>
-</div>
+
+
+            @foreach (var item in Model.Results)
+            {
+                var highestBid = item.Bids.OrderBy(x => x.Summa).First();
+                var temp = (highestBid.Summa != 0) ? highestBid.Summa.ToString() : "Inga bud";
+                <tr>
+                    <td scope="row"><a asp-action="GetAuction" asp-route-auctionid="@item.Auction.AuktionID">@item.Auction.Titel</a></td>
+                    <td>@item.Auction.Utropspris</td>
+                    <td>@temp</td>
+                    <td>@item.Auction.SlutDatum</td>
+                </tr>
+            }
+
+        </table>
+    </div>
 
 

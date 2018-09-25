@@ -1,0 +1,39 @@
+﻿@*<div class="card-deck mb-3 text-center">
+        @foreach (var auction in @Model.Auctions)
+        {
+            <div class="card mb-4 shadow-sm">
+
+                <div class="card-body">
+                    <h1 class="card-title pricing-card-title">@auction.Auction.Titel <</h1>
+                    <h4> Aktivt bud: <small class="text-muted"> @auction.HighestBid</small></h4>
+                </div>
+            </div>
+        }
+
+
+
+
+    </div>*@
+@{ 
+  
+}
+
+<div class="list-group">
+    @foreach (var auction in @Model.Auctions)
+    {
+
+            <a asp-action="GetAuction" asp-route-auctionid="@auction.Auction.AuktionID" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@auction.Auction.Titel</h5>
+                    <small class="text-danger">@auction.Auction.SlutDatumString</small>
+                </div>
+                <p class="mb-1">Utropspris: @auction.Auction.Utropspris</p>
+                <p class="mb-1">Aktivt bud: @auction.HighestBid</p>
+                <p class="mb-1">Startdatum: @auction.Auction.StartDatumString</p>
+
+            </a>
+
+            }
+    </div>
+
+
