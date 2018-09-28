@@ -73,7 +73,7 @@ namespace NackowskisAuctionHouse.Controllers
                     var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
                     if (result.IsSuccessStatusCode)
                     {
-                        await _hubContext
+                        //await _hubContext.Groups.AddToGroupAsync(); 
                     }
                 }
                 else

@@ -69,8 +69,42 @@ $(function () {
 });
 
 
+//$("#messageButton").click(function () {
+
+//    var collapseDiv = $("#messageCollapse");
+    
+//    collapseDiv.toggle();
+//});
+
+//    $(document).click(function (event) {
+//        debugger
+//        var collapseDiv = $("#messageCollapse");
+//        var state = collapseDiv.hasClass('show');
+//        if (state) {
+//            collapseDiv.toggle();
+//        }
+        
+        
+        
+//    });
+$(document).ready(function () {
+    $('#messageButton').on('click', function () {
+        $('.collapse').collapse('hide');
+    });
+    $(document).click(function (event) {
+        
+        var collapseDiv = $("#messageCollapse");
+        var state = collapseDiv.hasClass('show');
+    
+        if (state) {
+            $('.collapse').collapse('hide');
+        }
 
 
+
+    });
+
+});
 
 
 //Barchart dropdown select ajax calls

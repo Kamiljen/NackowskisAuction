@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 .container {
+    position: relative;
 }
 
 .list-group-item {
@@ -67,6 +68,18 @@ input[type=time]::-webkit-outer-spin-button {
     appearance: none;
     margin: 9px;
 }
+
+/*  */
+#messageCollapse{
+    margin-top: 45px;
+    position: absolute;
+    z-index: 1000;
+    /*overflow-y: visible;*/
+    width: 300px;
+    height: auto;
+    
+}
+
 
 /*Style select dropdowns*/
 

@@ -28,4 +28,4 @@ namespace NackowskisAuctionHouse.Hubs
             }
     }
     }
-}
+
