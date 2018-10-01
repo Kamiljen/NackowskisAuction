@@ -11,9 +11,9 @@ namespace NackowskisAuctionHouse.IdentityService
 {
     public interface IIdentityService
     {
-        Task<string> SignInAsync(AppUser user, bool isPersistent);
+        Task<bool> SignInAsync(AppUser user, bool isPersistent);
         Task<SignInResult> SignInAsync(SignInVM Input);
-        void SignOut();
+        Task<string> SignOut();
         Task<AppUser> RegisterUser(RegisterVM input);
         Task<IdentityResult> AssignRoleAsync(AppUser user);
 
