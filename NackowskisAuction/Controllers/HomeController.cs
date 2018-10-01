@@ -10,6 +10,7 @@ using NackowskisAuction.Models;
 using NackowskisAuctionHouse.BusinessLayer;
 using NackowskisAuctionHouse.DAL.Models;
 using NackowskisAuctionHouse.Hubs;
+using NackowskisAuctionHouse.MessageService;
 using NackowskisAuctionHouse.ViewModels;
 
 namespace NackowskisAuctionHouse.Controllers
@@ -18,10 +19,12 @@ namespace NackowskisAuctionHouse.Controllers
     {
         private IBusinessService _businessService;
         private readonly IHubContext<NotificationHub> _hubContext;
-        public HomeController(IBusinessService businessService, IHubContext<NotificationHub> hubContext)
+        private IMessageService _messageService;
+        public HomeController(IBusinessService businessService, IHubContext<NotificationHub> hubContext, IMessageService messageService)
         {
             _businessService = businessService;
             _hubContext = hubContext;
+            _messageService = messageService;
         }
 
 
@@ -63,18 +66,15 @@ namespace NackowskisAuctionHouse.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> PlaceBid(BidVM bid)
+        public IActionResult PlaceBid(BidVM bid)
         {
-            //returnUrl = returnUrl ?? Url.Content("~/");
+           
             if (ModelState.IsValid)
             {
-                if (bid.bidSum < bid.oldBid)
+                if (bid.bidSum > bid.oldBid)
                 {
-                    var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
-                    if (result.IsSuccessStatusCode)
-                    {
-                        //await _hubContext.Groups.AddToGroupAsync(); 
-                    }
+                    var userName = User.Identity.Name;
+                     _businessService.InititeUserBid(bid, userName);
                 }
                 else
                 {
@@ -83,8 +83,6 @@ namespace NackowskisAuctionHouse.Controllers
                
             }
             return View("GetAuction", bid.auctionId);
-
-
 
         }
         [HttpPost]

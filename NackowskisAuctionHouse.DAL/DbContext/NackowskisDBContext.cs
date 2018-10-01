@@ -28,6 +28,8 @@ namespace NackowskisAuctionHouse.DAL.DbContext
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<AuctionCategory> AuctionCategories { get; set; }
+        public DbSet<AuctionBid> AuctionBids { get; set; }
+        public DbSet<UserMessage> UserMessages { get; set; }
 
     }
 }

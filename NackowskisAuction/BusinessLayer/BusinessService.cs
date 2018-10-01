@@ -12,15 +12,23 @@ using NackowskisAuctionHouse.ChartViewModels;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using NackowskisAuctionHouse.DAL.DbContext;
+using NackowskisAuctionHouse.DAL.ModelsEf;
+using NackowskisAuctionHouse.MessageService;
 
 namespace NackowskisAuctionHouse.BusinessLayer
 {
     public class BusinessService : IBusinessService
     {
         private  NackowskisApi _api;
-        public BusinessService()
+        private NackowskisDBContext _context;
+        private IMessageService _messageService;
+        
+        public BusinessService(NackowskisDBContext context, IMessageService messageService)
         {
             _api = new NackowskisApi();
+            _context = context;
+            _messageService = messageService;
         }
 
         public Task<HttpResponseMessage> CreateAuction(CreateAuctionVM model)
@@ -43,6 +51,34 @@ namespace NackowskisAuctionHouse.BusinessLayer
         {
             var model = new Bid { AuktionID = auctionId, Summa = sum, Budgivare = user };
             return _api.CreateBid(model);
+        }
+
+        public async void InititeUserBid(BidVM bid, string userName)
+        {
+            var result = await CreateBid(bid.auctionId, bid.bidSum, userName);
+            if (result.IsSuccessStatusCode)
+            {
+                var newBid = await GetHighestBidByUser(bid.auctionId, userName);
+                
+                PersistUserBid(bid.auctionId, newBid, userName);
+                var currentAuction = await GetAuctionAndBids(bid.auctionId);
+
+                var user = await _messageService.FindUserToMessage(bid.auctionId);
+                
+                var message = _messageService.CreateBidOverMessage(bid.auctionId, newBid.BudID, currentAuction.Auction.Titel, user);
+                _messageService.PersistUserMessage(message);
+                
+                //await _hubContext.Groups.AddToGroupAsync(); 
+            }
+        }
+
+        public void PersistUserBid(int auctionId, Bid bid, string userName)
+        {
+            _context.AuctionBids.Add(new AuctionBid
+            {
+                AuctionId = auctionId, BidId = bid.BudID, User = userName, BidSum = bid.Summa
+            });
+            _context.SaveChanges();
         }
 
         public async Task<AuctionsWithBidsVM> GetActiveAuctionsAndBids()
@@ -264,10 +300,13 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return _api.GetAuctions();
         }
 
-        public async Task<Bid> GetBid(int auctionId, int bidId)
+        public async Task<Bid> GetHighestBidByUser(int auctionId, string userName)
         {
-            return await _api.GetBid(auctionId, bidId);
+            var bids =  await _api.GetBids(auctionId);
+            return bids.Where(x => x.Budgivare == userName).OrderByDescending(x => x.Summa).First();
         }
+
+       
 
         public async Task<List<Bid>> GetBids(int auctionId)
         {

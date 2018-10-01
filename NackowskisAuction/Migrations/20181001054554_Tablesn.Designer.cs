@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NackowskisAuctionHouse.DAL.DbContext;
 
 namespace NackowskisAuctionHouse.Migrations
 {
     [DbContext(typeof(NackowskisDBContext))]
-    partial class NackowskisDBContextModelSnapshot : ModelSnapshot
+    [Migration("20181001054554_Tablesn")]
+    partial class Tablesn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

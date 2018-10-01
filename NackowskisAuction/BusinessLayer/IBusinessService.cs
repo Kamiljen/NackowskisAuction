@@ -17,14 +17,20 @@ namespace NackowskisAuctionHouse.BusinessLayer
         Task<HttpResponseMessage> DeleteBid(int bidId);
         Task<HttpResponseMessage> DeleteAuction(int auctionId);
 
+       
+
         Task<HttpResponseMessage> CreateBid(int auctionId, int sum, string user);
+        void InititeUserBid(BidVM bid, string userName);
+        void PersistUserBid(int auctionId, Bid bid, string userName);
+
         Task<AuctionsWithBidsVM> GetActiveAuctionsAndBids();
+        
 
         Task<SearchResultVM> FindAuctions(string searchParam, string orderBy, string searchString = "");
         Task<List<Auction>> GetAuctions();
         Task<Auction> GetAuction(int auctionId);
         Task<List<Bid>> GetBids(int auctionId);
-        Task<Bid> GetBid(int auctionId, int bidId);
+        Task<Bid> GetHighestBidByUser(int auctionId, string userName);
         Task<bool> HasBids(int auctionId);
         Task<AuctionWithBidsVM> GetAuctionAndBids(int auctionId);
 

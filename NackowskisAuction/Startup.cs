@@ -17,6 +17,7 @@ using NackowskisAuctionHouse.DAL.DbContext;
 using NackowskisAuctionHouse.DAL.IdentityModels;
 using NackowskisAuctionHouse.Hubs;
 using NackowskisAuctionHouse.IdentityService;
+using NackowskisAuctionHouse.MessageService;
 
 namespace NackowskisAuctionHouse
 {
@@ -52,6 +53,7 @@ namespace NackowskisAuctionHouse
 
             });
 
+            services.AddScoped<IMessageService, MessageService.MessageService>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IIdentityService, IdentityService.IdentityService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
