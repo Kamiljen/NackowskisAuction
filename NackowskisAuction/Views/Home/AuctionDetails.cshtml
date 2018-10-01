@@ -79,16 +79,16 @@
                 @if (Model.Auction.SkapadAv == user.Email)
                 {
                     <div class="col-sm-2">
-                        <button class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="DeleteAuction" asp-controller="Admin">Radera</button>
+                        <a class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="DeleteAuction" asp-controller="Admin">Radera</a>
                     </div>
                     <div class="col-sm-2">
-                        <button class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="EditAuction" asp-controller="Admin">Ändra</button>
+                        <a class="btn" asp-route-auctionId="@Model.Auction.AuktionID" asp-action="EditAuction" asp-controller="Admin">Ändra</a>
                     </div>
                 }
                 else
                 {
                     <div class="col-sm-4">
-                        <button class="btn my-2 my-sm-0" type="submit" disabled="disabled">Ändra</button>
+                        <button class="btn my-2 my-sm-0" type="submit" disabled="disabled">Radera</button>
                     </div>
                     <div class="col-sm-4">
                         <button class="btn my-2 my-sm-0" type="submit" disabled="disabled">Ändra</button>

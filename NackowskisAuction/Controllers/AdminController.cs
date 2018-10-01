@@ -84,12 +84,12 @@ namespace NackowskisAuctionHouse.Controllers
         [HttpGet]
         public async Task<IActionResult> EditAuction(int auctionId)
         {
-            var model = await _businessService.GetAuction(auctionId);
+            var model = await _businessService.GetAuctionEditModel(auctionId);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PushEditAuction(Auction model)
+        public async Task<IActionResult> PushEditAuction(EditAuctionVM model)
         {
             if (ModelState.IsValid)
             {
@@ -98,10 +98,10 @@ namespace NackowskisAuctionHouse.Controllers
                 var result = await _businessService.EditAuction(model);
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("GetAuction", new RouteValueDictionary(new { Controller = "Home", Action = "GetAuction", auctionId = model.AuktionID }));
+                    return RedirectToAction("GetAuction", new RouteValueDictionary(new { Controller = "Home", Action = "GetAuction", auctionId = model.AuctionId }));
                 }
             }
-            return RedirectToAction("EditAuction", new RouteValueDictionary(new { Controller = "Admin", Action = "EditAuction", auctionId = model.AuktionID }));
+            return RedirectToAction("EditAuction", new RouteValueDictionary(new { Controller = "Admin", Action = "EditAuction", auctionId = model.AuctionId }));
         }
 
         
@@ -113,10 +113,11 @@ namespace NackowskisAuctionHouse.Controllers
                 var result = await _businessService.DeleteAuction(auctionId);
                 if (result.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("FindAuctions", new RouteValueDictionary(new { Controller = "Home", Action = "FindAuctions", searchInput = "t" }));
+                    return RedirectToAction("FindAuctions", new RouteValueDictionary(new { controller = "Home", action = "FindAuctions", searchInput = " " }));
                 }
             }
-            return RedirectToAction("GetAuction" , new RouteValueDictionary( new { Controller = "Home", Action = "GetAuction", auctionId = auctionId }));
+            return RedirectToAction("GetAuction", new RouteValueDictionary( new { controller = "Home", action = "GetAuction", auctionId = auctionId }));
+           
         }
   
 

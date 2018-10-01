@@ -13,7 +13,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
     public interface IBusinessService
     {
         Task<HttpResponseMessage> CreateAuction(CreateAuctionVM model);
-        Task<HttpResponseMessage> EditAuction(Auction model);
+        Task<HttpResponseMessage> EditAuction(EditAuctionVM model);
         Task<HttpResponseMessage> DeleteBid(int bidId);
         Task<HttpResponseMessage> DeleteAuction(int auctionId);
 
@@ -22,7 +22,9 @@ namespace NackowskisAuctionHouse.BusinessLayer
 
         Task<SearchResultVM> FindAuctions(string searchParam, string orderBy, string searchString = "");
         Task<List<Auction>> GetAuctions();
+        Task<EditAuctionVM> GetAuctionEditModel(int auctionId);
         Task<Auction> GetAuction(int auctionId);
+        
         Task<List<Bid>> GetBids(int auctionId);
         Task<Bid> GetBid(int auctionId, int bidId);
         Task<bool> HasBids(int auctionId);

@@ -67,7 +67,26 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return model;
         }
 
-
+        public async Task<EditAuctionVM> GetAuctionEditModel(int auctionId)
+        {
+            var model = await GetAuction(auctionId);
+            var startTid = model.StartDatumString.Substring(11, 5);
+            var slutTid = model.SlutDatumString.Substring(11, 5);
+            var editModel = new EditAuctionVM
+            {
+                AuctionId = model.AuktionID,
+                Titel = model.Titel,
+                Beskrivning = model.Beskrivning,
+                StartDatum = DateTime.Parse(model.StartDatumString.Substring(0,10)),
+                StartTid = TimeSpan.Parse(startTid),
+                SlutDatum = DateTime.Parse(model.SlutDatumString.Substring(0, 10)),
+                SlutTid = TimeSpan.Parse(slutTid),
+                Utropspris = model.Utropspris,
+                SkapadAv = model.SkapadAv,
+                Gruppkod = model.Gruppkod
+            };
+            return editModel;
+        }
         public Task<HttpResponseMessage> DeleteAuction(int auctionId)
         {
             return _api.DeleteAuction(auctionId);
@@ -78,9 +97,20 @@ namespace NackowskisAuctionHouse.BusinessLayer
             return _api.DeleteBid(bidId);
         }
 
-        public Task<HttpResponseMessage> EditAuction(Auction model)
+        public Task<HttpResponseMessage> EditAuction(EditAuctionVM model)
         {
-            return _api.EditAuction(model);
+            var apiModel = new Auction
+            {
+                AuktionID = model.AuctionId,
+                Titel = model.Titel,
+                Beskrivning = model.Beskrivning,
+                StartDatumString = model.StartDatum.Add(model.SlutTid).ToString("yyyy-MM-dd HH:mm:ss"),
+                SlutDatumString = model.SlutDatum.Add(model.StartTid).ToString("yyyy-MM-dd HH:mm:ss"),
+                Utropspris = model.Utropspris,
+                SkapadAv = model.SkapadAv,
+                Gruppkod = model.Gruppkod
+            };
+            return _api.EditAuction(apiModel);
         }
 
         public async Task<SearchResultVM> FindAuctions(string searchParam = " ", string orderBy = " ", string searchString = " ")
@@ -290,5 +320,7 @@ namespace NackowskisAuctionHouse.BusinessLayer
             var bids = await _api.GetBids(auctionId);
             return bids.Count > 0;
         }
+
+       
     }
 }

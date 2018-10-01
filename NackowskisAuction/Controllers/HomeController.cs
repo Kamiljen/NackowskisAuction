@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using NackowskisAuction.Models;
 using NackowskisAuctionHouse.BusinessLayer;
 using NackowskisAuctionHouse.DAL.Models;
@@ -76,7 +77,9 @@ namespace NackowskisAuctionHouse.Controllers
                 }
                
             }
-            return RedirectToAction("GetAuction", bid.auctionId);
+            
+            return RedirectToAction("GetAuction", new RouteValueDictionary(
+            new { controller = "Home", action = "GetAuction", auctionid = bid.auctionId }));
 
 
 
@@ -94,7 +97,9 @@ namespace NackowskisAuctionHouse.Controllers
 
         public async Task<IActionResult> FindAuctions(string searchString = " ", string searchParam = " ")
         {
-            var result = await  _businessService.FindAuctions(searchParam, "", searchString);
+            var searchString2 = (searchString == null) ? " " : searchString;
+           
+            var result = await  _businessService.FindAuctions(searchParam, "", searchString2);
             result.SearchString = searchString;
             return View("SearchResults", result);
         }

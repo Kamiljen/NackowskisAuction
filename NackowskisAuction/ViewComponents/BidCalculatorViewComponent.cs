@@ -14,6 +14,7 @@ namespace NackowskisAuctionHouse.ViewComponents
             var model = new BidVM();
             model.calculatedSum = Convert.ToInt32(bidSum * 1.05);
             model.auctionId = auctionId;
+            model.oldBid = bidSum;
 
             return View(model);
         }

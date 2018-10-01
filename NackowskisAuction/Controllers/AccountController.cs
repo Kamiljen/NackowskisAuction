@@ -90,7 +90,9 @@ namespace NackowskisAuctionHouse.Controllers
         {
              _userService.SignOut();
 
-            return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://nackowksis.azurewebsites.net");
+            //To be used with External signout
+            //return Redirect("https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=https://nackowksis.azurewebsites.net");
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
