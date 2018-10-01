@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using NackowskisAuctionHouse.DAL.Models;
+using NackowskisAuctionHouse.DAL.IdentityModels;
 using System;
 using System.Collections.Generic;
 using System.Text;

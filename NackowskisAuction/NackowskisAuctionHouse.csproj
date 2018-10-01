@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NackowskisAuctionHouse.DAL\NackowskisAuctionHouse.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="TagHelpers\" />
     <Folder Include="wwwroot\images\" />

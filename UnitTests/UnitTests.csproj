@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NackowskisAuctionHouse.DAL\NackowskisAuctionHouse.DAL.csproj" />
     <ProjectReference Include="..\NackowskisAuction\NackowskisAuctionHouse.csproj" />
   </ItemGroup>
 

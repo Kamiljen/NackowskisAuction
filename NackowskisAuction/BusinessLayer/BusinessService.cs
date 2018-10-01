@@ -12,21 +12,22 @@ using NackowskisAuctionHouse.ChartViewModels;
 using System.Globalization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
-using NackowskisAuctionHouse.DAL.DbContext;
+
 using NackowskisAuctionHouse.DAL.ModelsEf;
 using NackowskisAuctionHouse.MessageService;
+using NackowskisAuctionHouse.DAL.ApiService;
 
 namespace NackowskisAuctionHouse.BusinessLayer
 {
     public class BusinessService : IBusinessService
     {
-        private  NackowskisApi _api;
-        private NackowskisDBContext _context;
+        private INackowskisApi _api;
+        private IRepositoryService _context;
         private IMessageService _messageService;
-        
-        public BusinessService(NackowskisDBContext context, IMessageService messageService)
+
+        public BusinessService(IRepositoryService context, IMessageService messageService, INackowskisApi api)
         {
-            _api = new NackowskisApi();
+            _api = api;
             _context = context;
             _messageService = messageService;
         }
@@ -74,11 +75,17 @@ namespace NackowskisAuctionHouse.BusinessLayer
 
         public void PersistUserBid(int auctionId, Bid bid, string userName)
         {
-            _context.AuctionBids.Add(new AuctionBid
+            var model = new AuctionBid
             {
-                AuctionId = auctionId, BidId = bid.BudID, User = userName, BidSum = bid.Summa
-            });
-            _context.SaveChanges();
+                AuctionId = auctionId,
+                BidId = bid.BudID,
+                User = userName,
+                BidSum = bid.Summa
+            };
+
+
+            _context.AuctionBid(model);
+            
         }
 
         public async Task<AuctionsWithBidsVM> GetActiveAuctionsAndBids()

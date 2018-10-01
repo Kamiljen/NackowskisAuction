@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NackowskisAuctionHouse;
 using NackowskisAuctionHouse.BusinessLayer;
+using NackowskisAuctionHouse.DAL;
+using NackowskisAuctionHouse.DAL.ApiService;
 using NackowskisAuctionHouse.DAL.DbContext;
 using NackowskisAuctionHouse.DAL.IdentityModels;
+using NackowskisAuctionHouse.DAL.RepoService;
 using NackowskisAuctionHouse.Hubs;
 using NackowskisAuctionHouse.IdentityService;
 using NackowskisAuctionHouse.MessageService;
@@ -33,7 +35,7 @@ namespace NackowskisAuctionHouse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NackowskisDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NackowskisDb"), b => b.MigrationsAssembly("NackowskisAuctionHouse")));
+            services.AddDbContext<NackowskisDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Nackowskis"), b => b.MigrationsAssembly("NackowskisAuctionHouse")));
             services.AddIdentity<AppUser, IdentityRole>().AddDefaultUI()
             .AddEntityFrameworkStores<NackowskisDBContext>().AddDefaultTokenProviders();
 
@@ -53,6 +55,8 @@ namespace NackowskisAuctionHouse
 
             });
 
+            services.AddScoped<IRepositoryService, RepositoryService>();
+            services.AddScoped<INackowskisApi, NackowskisApi>();
             services.AddScoped<IMessageService, MessageService.MessageService>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IIdentityService, IdentityService.IdentityService>();
