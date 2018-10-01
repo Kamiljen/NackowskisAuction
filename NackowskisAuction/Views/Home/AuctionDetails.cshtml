@@ -50,9 +50,9 @@
         }
             <tr>
                 <th scope="row">Aktuellt bud:</th>
-                @if (highestBid.Summa > 0)
+                @if (@Model.HighestBid > 0)
                 {
-                <td>@highestBid.Summa</td>
+                <td>@Model.HighestBid</td>
 
                 }
                 else

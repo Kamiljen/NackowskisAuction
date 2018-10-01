@@ -65,7 +65,7 @@ namespace NackowskisAuctionHouse.Controllers
             //returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if (bid.bidSum < bid.oldBid)
+                if (bid.bidSum > bid.oldBid)
                 {
                     var result = await _businessService.CreateBid(sum: bid.bidSum, user: User.Identity.Name, auctionId: bid.auctionId);
                     
@@ -76,7 +76,7 @@ namespace NackowskisAuctionHouse.Controllers
                 }
                
             }
-            return View("GetAuction", bid.auctionId);
+            return RedirectToAction("GetAuction", bid.auctionId);
 
 
 
